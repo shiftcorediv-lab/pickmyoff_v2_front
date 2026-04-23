@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pick My Off</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f5f6f8;
+      color: #333;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: 28px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .description {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    textarea,
+    button {
+      width: 100%;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    textarea {
+      border: 1px solid #d0d7de;
+      padding: 14px;
+      background: #fff;
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .mt-8 {
+      margin-top: 8px;
+    }
+
+    .mt-12 {
+      margin-top: 12px;
+    }
+
+    .mt-16 {
+      margin-top: 16px;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .info-box {
+      padding: 14px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .info-box.error {
+      background: #fff1f1;
+      border-color: #ffc9c9;
+      color: #c62828;
+    }
+
+    .info-box.success {
+      background: #f0fff4;
+      border-color: #b7ebc6;
+      color: #1b5e20;
+    }
+
+    .month-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .month-title {
+      flex: 1;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .weekday-row,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .weekday {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      padding: 8px 0;
+      font-weight: bold;
+    }
+
+    .weekday.sun {
+      color: #c62828;
+    }
+
+    .weekday.sat {
+      color: #1565c0;
+    }
+
+    .day-cell {
+      aspect-ratio: 1 / 1;
+      border: 1px solid #d9dee5;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      user-select: none;
+      transition: 0.15s;
+    }
+
+    .day-cell.empty {
+      background: transparent;
+      border: none;
+      cursor: default;
+    }
+
+    .day-cell.sat {
+      color: #1565c0;
+    }
+
+    .day-cell.sun {
+      color: #c62828;
+    }
+
+    .day-cell.selected {
+      background: #4caf50;
+      color: #fff;
+      border-color: #4caf50;
+      font-weight: bold;
+    }
+
+    .day-cell.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .selected-list {
+      padding: 12px;
+      border-radius: 12px;
+      background: #fafafa;
+      border: 1px solid #e3e7eb;
+      min-height: 54px;
+      font-size: 14px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .sub-btn {
+      border: none;
+      background: #1976d2;
+      color: #fff;
+      padding: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .clear-btn {
+      border: none;
+      background: #757575;
+      color: #fff;
+      padding: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      border: none;
+      background: #4caf50;
+      color: white;
+      padding: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .submit-btn:disabled,
+    .sub-btn:disabled,
+    .clear-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      white-space: pre-wrap;
+    }
+
+    .message.error {
+      color: #c62828;
+    }
+
+    .message.success {
+      color: #1b5e20;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #666;
+      margin-top: 6px;
+    }
+
+    #lineWarningBanner {
+      display: none;
+      background: #ffebee;
+      color: #c62828;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      border-bottom: 1px solid #ffcdd2;
+    }
+
+    #mainFormArea {
+      display: none;
+    }
+
+    #completeScreen {
+      display: none;
+    }
+
+    .complete-icon {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .complete-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #1b5e20;
+    }
+
+    .complete-text {
+      text-align: center;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      white-space: pre-wrap;
+    }
+
+    .complete-detail {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #eef2ff;
+      color: #3949ab;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .danger-box {
+      padding: 14px;
+      border-radius: 12px;
+      background: #fff1f1;
+      border: 1px solid #ffc9c9;
+      color: #c62828;
+      line-height: 1.7;
+      font-weight: bold;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 14px;
+      }
+
+      .day-cell {
+        font-size: 14px;
+        border-radius: 10px;
+      }
+
+      .month-title {
+        font-size: 18px;
+      }
+
+      .button-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lineWarningBanner">
+    ⚠ LINE内ブラウザでは正常に動作しない場合があります。<br>
+    ブラウザメニューから「外部ブラウザで開く」を選択してください。
+  </div>
+
+  <div class="container" id="mainFormArea">
+    <div class="card">
+      <h1>Pick My Off<br>希望休回収ツール</h1>
+      <div class="description">
+        ShiftCore連携でログイン済みの状態です。翌月の希望休を提出してください。
+      </div>
+
+      <div id="entryBannerArea"></div>
+
+      <label>ログインユーザー</label>
+      <div class="info-box" id="userNameBox">取得中...</div>
+
+      <div class="mt-12">
+        <label>社員コード</label>
+        <div class="info-box" id="employeeCodeBox">取得中...</div>
+      </div>
+
+      <div class="mt-12">
+        <label>アカウント情報</label>
+        <div id="accountMetaArea"></div>
+      </div>
+
+      <div class="mt-12" id="inactiveWarningArea" style="display:none;">
+        <div class="danger-box">
+          このアカウントは現在「非稼働（off）」です。<br>
+          希望休の提出対象外のため、この画面からは送信できません。
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>希望休選択</h2>
+
+      <div class="month-control">
+        <div class="month-title" id="monthTitle"></div>
+      </div>
+
+      <div class="weekday-row">
+        <div class="weekday sun">日</div>
+        <div class="weekday">月</div>
+        <div class="weekday">火</div>
+        <div class="weekday">水</div>
+        <div class="weekday">木</div>
+        <div class="weekday">金</div>
+        <div class="weekday sat">土</div>
+      </div>
+
+      <div class="calendar-grid" id="calendarGrid"></div>
+
+      <div class="button-row mt-12">
+        <button class="clear-btn" id="noHolidayBtn" type="button">希望休なし</button>
+        <button class="clear-btn" id="clearSelectionBtn" type="button">選択をクリア</button>
+      </div>
+
+      <div class="mt-16">
+        <label>選択中の希望休</label>
+        <div class="selected-list" id="selectedDatesBox">未選択</div>
+        <div class="hint" id="noHolidayHint"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>補足メモ</h2>
+      <label for="note">メモ</label>
+      <textarea id="note" placeholder="任意で補足を入力"></textarea>
+    </div>
+
+    <div class="card">
+      <button class="submit-btn" id="submitBtn" type="button">希望休を送信</button>
+      <div class="message" id="messageBox"></div>
+    </div>
+  </div>
+
+  <div class="container" id="completeScreen">
+    <div class="card">
+      <div class="complete-icon">✅</div>
+      <div class="complete-title">送信完了</div>
+      <div class="complete-text" id="completeText">
+        希望休の送信が完了しました。
+      </div>
+      <div class="complete-detail" id="completeDetail"></div>
+      <button class="submit-btn mt-16" id="backToFormBtn" type="button">入力画面へ戻る</button>
+    </div>
+  </div>
+
+  <script>
+    const shiftcoreParams = <?!= shiftcoreParamsJson ?>;
+
+    let currentDate = new Date();
+    currentDate.setDate(1);
+    currentDate.setMonth(currentDate.getMonth() + 1);
+
+    let selectedDates = new Set();
+    let noHolidayRequested = false;
+
+    let currentUser = {
+      userId: "",
+      displayName: "",
+      employeeCode: "",
+      role: "",
+      workStatus: ""
+    };
+
+    const mainFormArea = document.getElementById("mainFormArea");
+    const completeScreen = document.getElementById("completeScreen");
+
+    const userNameBox = document.getElementById("userNameBox");
+    const employeeCodeBox = document.getElementById("employeeCodeBox");
+    const accountMetaArea = document.getElementById("accountMetaArea");
+    const inactiveWarningArea = document.getElementById("inactiveWarningArea");
+
+    const monthTitle = document.getElementById("monthTitle");
+    const calendarGrid = document.getElementById("calendarGrid");
+    const selectedDatesBox = document.getElementById("selectedDatesBox");
+    const noHolidayHint = document.getElementById("noHolidayHint");
+    const noHolidayBtn = document.getElementById("noHolidayBtn");
+    const clearSelectionBtn = document.getElementById("clearSelectionBtn");
+    const noteInput = document.getElementById("note");
+    const submitBtn = document.getElementById("submitBtn");
+    const messageBox = document.getElementById("messageBox");
+
+    const completeText = document.getElementById("completeText");
+    const completeDetail = document.getElementById("completeDetail");
+    const backToFormBtn = document.getElementById("backToFormBtn");
+
+    function isLineInAppBrowser() {
+      const ua = navigator.userAgent || "";
+      return ua.includes("Line/");
+    }
+
+    function showMessage(target, text, type = "") {
+      target.textContent = text;
+      target.className = "message";
+      if (type) {
+        target.classList.add(type);
+      }
+    }
+
+    function setInfoBox(target, text, type = "") {
+      target.textContent = text;
+      target.className = "info-box";
+      if (type) {
+        target.classList.add(type);
+      }
+    }
+
+    function normalizeText(value) {
+      return String(value == null ? "" : value).trim();
+    }
+
+    function formatDateKey(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function getTargetYearMonth() {
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      return `${year}-${month}`;
+    }
+
+    function buildCurrentUserFromShiftCore(params) {
+      const p = params || {};
+      return {
+        userId: normalizeText(p.userId || p.user_id || p.userid),
+        displayName: normalizeText(p.displayName || p.display_name || p.name),
+        employeeCode: normalizeText(p.employeeCode || p.employee_code || p.employeeId || p.employee_id).toUpperCase(),
+        role: normalizeText(p.role),
+        workStatus: normalizeText(p.workStatus || p.work_status).toLowerCase()
+      };
+    }
+
+    function isUserInactive() {
+      return currentUser.workStatus === "off";
+    }
+
+    function updateSubmitButtonState() {
+      const hasUser = !!currentUser.userId && !!currentUser.displayName && !!currentUser.employeeCode;
+      const hasSelection = noHolidayRequested || selectedDates.size > 0;
+      const canSubmit = hasUser && hasSelection && !isUserInactive();
+
+      submitBtn.disabled = !canSubmit;
+      noHolidayBtn.disabled = isUserInactive();
+      clearSelectionBtn.disabled = isUserInactive();
+      noteInput.disabled = isUserInactive();
+    }
+
+    function renderAccountInfo() {
+      setInfoBox(
+        userNameBox,
+        currentUser.displayName || "ユーザー情報を取得できませんでした",
+        currentUser.displayName ? "success" : "error"
+      );
+
+      setInfoBox(
+        employeeCodeBox,
+        currentUser.employeeCode || "社員コードを取得できませんでした",
+        currentUser.employeeCode ? "success" : "error"
+      );
+
+      accountMetaArea.innerHTML = "";
+
+      const roleBadge = document.createElement("span");
+      roleBadge.className = "badge";
+      roleBadge.textContent = "role: " + (currentUser.role || "未設定");
+
+      const workStatusBadge = document.createElement("span");
+      workStatusBadge.className = "badge";
+      workStatusBadge.textContent = "workStatus: " + (currentUser.workStatus || "未設定");
+
+      accountMetaArea.appendChild(roleBadge);
+      accountMetaArea.appendChild(workStatusBadge);
+
+      inactiveWarningArea.style.display = isUserInactive() ? "block" : "none";
+    }
+
+    function setupShiftCoreEntryBanner(params) {
+      if ((params.from || "") !== "shiftcore") {
+        return;
+      }
+
+      const banner = document.createElement("div");
+      banner.style.margin = "0 auto 16px";
+      banner.style.padding = "12px 14px";
+      banner.style.borderRadius = "12px";
+      banner.style.background = "#eef3ff";
+      banner.style.border = "1px solid #cfdcff";
+      banner.style.fontSize = "14px";
+      banner.style.lineHeight = "1.6";
+      banner.innerHTML = `
+        <div><strong>ShiftCoreから移動しました</strong></div>
+        <div>module: ${params.module || "unknown"}</div>
+      `;
+      document.getElementById("entryBannerArea").appendChild(banner);
+    }
+
+    function renderCalendar() {
+      calendarGrid.innerHTML = "";
+
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      monthTitle.textContent = `${year}年${month + 1}月`;
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      const startWeekday = firstDay.getDay();
+      const totalDays = lastDay.getDate();
+
+      for (let i = 0; i < startWeekday; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.className = "day-cell empty";
+        calendarGrid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const cell = document.createElement("div");
+        const dateObj = new Date(year, month, day);
+        const weekday = dateObj.getDay();
+        const dateKey = formatDateKey(dateObj);
+
+        cell.className = "day-cell";
+        cell.textContent = day;
+
+        if (weekday === 0) cell.classList.add("sun");
+        if (weekday === 6) cell.classList.add("sat");
+        if (selectedDates.has(dateKey)) cell.classList.add("selected");
+        if (isUserInactive()) cell.classList.add("disabled");
+
+        if (!isUserInactive()) {
+          cell.addEventListener("click", () => {
+            noHolidayRequested = false;
+            toggleDate(dateKey);
+            renderCalendar();
+            renderSelectedDates();
+            updateSubmitButtonState();
+          });
+        }
+
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    function toggleDate(dateKey) {
+      if (selectedDates.has(dateKey)) {
+        selectedDates.delete(dateKey);
+      } else {
+        selectedDates.add(dateKey);
+      }
+    }
+
+    function renderSelectedDates() {
+      const dates = Array.from(selectedDates).sort();
+
+      if (noHolidayRequested) {
+        selectedDatesBox.textContent = "希望休なし";
+        noHolidayHint.textContent = "この月は希望休なしとして送信されます";
+        return;
+      }
+
+      selectedDatesBox.textContent = dates.length ? dates.join(", ") : "未選択";
+      noHolidayHint.textContent = "";
+    }
+
+    function buildConfirmMessage(payload) {
+      const holidayText = payload.submitType === "希望休なし"
+        ? "希望休なし"
+        : payload.offDates.join(", ");
+
+      return (
+        "この内容で送信しますか？\n\n" +
+        "【氏名】\n" + payload.displayName + "\n\n" +
+        "【社員コード】\n" + payload.employeeCode + "\n\n" +
+        "【対象年月】\n" + payload.targetYearMonth + "\n\n" +
+        "【希望休】\n" + holidayText + "\n\n" +
+        "【メモ】\n" + (payload.memo || "なし")
+      );
+    }
+
+    function showCompleteScreen(payload) {
+      const holidayText = payload.submitType === "希望休なし"
+        ? "希望休なし"
+        : (payload.offDates.length ? payload.offDates.join(", ") : "なし");
+
+      completeText.textContent = payload.displayName + " さんの希望休提出が完了しました。";
+
+      completeDetail.textContent =
+        "【氏名】\n" + payload.displayName + "\n\n" +
+        "【社員コード】\n" + payload.employeeCode + "\n\n" +
+        "【対象年月】\n" + payload.targetYearMonth + "\n\n" +
+        "【希望休】\n" + holidayText + "\n\n" +
+        "【メモ】\n" + (payload.memo || "なし");
+
+      mainFormArea.style.display = "none";
+      completeScreen.style.display = "block";
+      window.scrollTo(0, 0);
+    }
+
+    function applyExistingRequest(result) {
+      selectedDates.clear();
+      noHolidayRequested = false;
+      noteInput.value = "";
+
+      if (!result || !result.exists) {
+        renderCalendar();
+        renderSelectedDates();
+        updateSubmitButtonState();
+        return;
+      }
+
+      const offDates = Array.isArray(result.offDates) ? result.offDates : [];
+      offDates.forEach(dateStr => selectedDates.add(dateStr));
+
+      noteInput.value = result.memo || "";
+      noHolidayRequested = result.submitType === "希望休なし";
+
+      renderCalendar();
+      renderSelectedDates();
+      updateSubmitButtonState();
+    }
+
+    function loadLatestRequest() {
+      if (!currentUser.userId) {
+        showMessage(messageBox, "ShiftCoreユーザー情報を取得できませんでした", "error");
+        return;
+      }
+
+      showMessage(messageBox, "提出済み内容を確認中...", "");
+
+      google.script.run
+        .withSuccessHandler((result) => {
+          if (result.success) {
+            applyExistingRequest(result);
+
+            if (result.exists) {
+              showMessage(messageBox, "この月の提出済み内容を読み込みました", "success");
+            } else {
+              showMessage(messageBox, "この月の提出データはまだありません", "");
+            }
+          } else {
+            showMessage(messageBox, result.message || "提出済み内容の取得に失敗しました", "error");
+          }
+        })
+        .withFailureHandler((error) => {
+          console.error(error);
+          showMessage(messageBox, "提出済み内容の取得に失敗しました", "error");
+        })
+        .getLatestShiftRequest(currentUser.userId, getTargetYearMonth());
+    }
+
+    function buildSubmitPayload() {
+      const offDates = Array.from(selectedDates).sort();
+      const submitType = noHolidayRequested ? "希望休なし" : "希望休あり";
+
+      return {
+        userId: currentUser.userId,
+        displayName: currentUser.displayName,
+        employeeCode: currentUser.employeeCode,
+        targetYearMonth: getTargetYearMonth(),
+        offDates: noHolidayRequested ? [] : offDates,
+        memo: noteInput.value.trim(),
+        submitType: submitType
+      };
+    }
+
+    noHolidayBtn.addEventListener("click", () => {
+      if (isUserInactive()) return;
+
+      selectedDates.clear();
+      noHolidayRequested = true;
+      renderCalendar();
+      renderSelectedDates();
+      showMessage(messageBox, "この月は「希望休なし」で送信できます", "success");
+      updateSubmitButtonState();
+    });
+
+    clearSelectionBtn.addEventListener("click", () => {
+      if (isUserInactive()) return;
+
+      selectedDates.clear();
+      noHolidayRequested = false;
+      renderCalendar();
+      renderSelectedDates();
+      showMessage(messageBox, "選択をクリアしました", "");
+      updateSubmitButtonState();
+    });
+
+    backToFormBtn.addEventListener("click", () => {
+      completeScreen.style.display = "none";
+      mainFormArea.style.display = "block";
+      showMessage(messageBox, "", "");
+      window.scrollTo(0, 0);
+      updateSubmitButtonState();
+    });
+
+    submitBtn.addEventListener("click", () => {
+      showMessage(messageBox, "", "");
+
+      if (isUserInactive()) {
+        showMessage(messageBox, "このアカウントは提出対象外です", "error");
+        return;
+      }
+
+      if (!currentUser.userId || !currentUser.displayName || !currentUser.employeeCode) {
+        showMessage(messageBox, "ShiftCoreユーザー情報が不足しています", "error");
+        return;
+      }
+
+      if (!noHolidayRequested && selectedDates.size === 0) {
+        showMessage(messageBox, "希望休を1日以上選択するか、「希望休なし」を選んでください", "error");
+        return;
+      }
+
+      const payload = buildSubmitPayload();
+      const ok = window.confirm(buildConfirmMessage(payload));
+
+      if (!ok) {
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "送信中...";
+
+      google.script.run
+        .withSuccessHandler((result) => {
+          if (result.success) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "希望休を送信";
+            showCompleteScreen(payload);
+          } else {
+            showMessage(messageBox, result.message || "保存に失敗しました", "error");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "希望休を送信";
+            updateSubmitButtonState();
+          }
+        })
+        .withFailureHandler((error) => {
+          console.error(error);
+          showMessage(messageBox, "送信中にエラーが発生しました", "error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "希望休を送信";
+          updateSubmitButtonState();
+        })
+        .submitShiftRequest(payload);
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (isLineInAppBrowser()) {
+        document.getElementById("lineWarningBanner").style.display = "block";
+      }
+
+      currentUser = buildCurrentUserFromShiftCore(shiftcoreParams);
+
+      setupShiftCoreEntryBanner(shiftcoreParams);
+      renderAccountInfo();
+      renderCalendar();
+      renderSelectedDates();
+
+      mainFormArea.style.display = "block";
+      updateSubmitButtonState();
+
+      if (currentUser.userId && currentUser.displayName && currentUser.employeeCode) {
+        loadLatestRequest();
+      } else {
+        showMessage(messageBox, "ShiftCoreから必要なユーザー情報を受け取れていません", "error");
+      }
+    });
+  </script>
+</body>
+</html>

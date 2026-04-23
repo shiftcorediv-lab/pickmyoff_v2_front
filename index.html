@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pick My Off</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -24,10 +22,10 @@
     }
 
     .card {
-      background: #ffffff;
+      background: #fff;
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
       margin-bottom: 16px;
     }
 
@@ -57,8 +55,7 @@
       font-size: 14px;
     }
 
-    textarea,
-    button {
+    textarea, button {
       width: 100%;
       border-radius: 12px;
       font-size: 16px;
@@ -72,17 +69,8 @@
       resize: vertical;
     }
 
-    .mt-8 {
-      margin-top: 8px;
-    }
-
-    .mt-12 {
-      margin-top: 12px;
-    }
-
-    .mt-16 {
-      margin-top: 16px;
-    }
+    .mt-12 { margin-top: 12px; }
+    .mt-16 { margin-top: 16px; }
 
     .button-row {
       display: grid;
@@ -128,8 +116,7 @@
       font-weight: bold;
     }
 
-    .weekday-row,
-    .calendar-grid {
+    .weekday-row, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 6px;
@@ -143,13 +130,8 @@
       font-weight: bold;
     }
 
-    .weekday.sun {
-      color: #c62828;
-    }
-
-    .weekday.sat {
-      color: #1565c0;
-    }
+    .weekday.sun { color: #c62828; }
+    .weekday.sat { color: #1565c0; }
 
     .day-cell {
       aspect-ratio: 1 / 1;
@@ -162,7 +144,7 @@
       justify-content: center;
       font-size: 15px;
       user-select: none;
-      transition: 0.15s;
+      transition: .15s;
     }
 
     .day-cell.empty {
@@ -171,13 +153,8 @@
       cursor: default;
     }
 
-    .day-cell.sat {
-      color: #1565c0;
-    }
-
-    .day-cell.sun {
-      color: #c62828;
-    }
+    .day-cell.sat { color: #1565c0; }
+    .day-cell.sun { color: #c62828; }
 
     .day-cell.selected {
       background: #4caf50;
@@ -187,7 +164,7 @@
     }
 
     .day-cell.disabled {
-      opacity: 0.45;
+      opacity: .45;
       cursor: not-allowed;
       pointer-events: none;
     }
@@ -203,15 +180,6 @@
       word-break: break-word;
     }
 
-    .sub-btn {
-      border: none;
-      background: #1976d2;
-      color: #fff;
-      padding: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
     .clear-btn {
       border: none;
       background: #757575;
@@ -224,16 +192,14 @@
     .submit-btn {
       border: none;
       background: #4caf50;
-      color: white;
+      color: #fff;
       padding: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .submit-btn:disabled,
-    .sub-btn:disabled,
-    .clear-btn:disabled {
-      opacity: 0.6;
+    .submit-btn:disabled, .clear-btn:disabled {
+      opacity: .6;
       cursor: not-allowed;
     }
 
@@ -244,13 +210,8 @@
       white-space: pre-wrap;
     }
 
-    .message.error {
-      color: #c62828;
-    }
-
-    .message.success {
-      color: #1b5e20;
-    }
+    .message.error { color: #c62828; }
+    .message.success { color: #1b5e20; }
 
     .hint {
       font-size: 13px;
@@ -258,23 +219,26 @@
       margin-top: 6px;
     }
 
-    #lineWarningBanner {
-      display: none;
-      background: #ffebee;
-      color: #c62828;
-      text-align: center;
-      padding: 12px;
-      font-size: 14px;
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
       font-weight: bold;
-      border-bottom: 1px solid #ffcdd2;
+      background: #eef2ff;
+      color: #3949ab;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
 
-    #mainFormArea {
-      display: none;
-    }
-
-    #completeScreen {
-      display: none;
+    .danger-box {
+      padding: 14px;
+      border-radius: 12px;
+      background: #fff1f1;
+      border: 1px solid #ffc9c9;
+      color: #c62828;
+      line-height: 1.7;
+      font-weight: bold;
     }
 
     .complete-icon {
@@ -309,56 +273,22 @@
       white-space: pre-wrap;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
-      background: #eef2ff;
-      color: #3949ab;
-      margin-right: 8px;
-      margin-bottom: 8px;
-    }
-
-    .danger-box {
-      padding: 14px;
-      border-radius: 12px;
-      background: #fff1f1;
-      border: 1px solid #ffc9c9;
-      color: #c62828;
-      line-height: 1.7;
-      font-weight: bold;
+    #lineWarningBanner,
+    #completeScreen {
+      display: none;
     }
 
     @media (max-width: 480px) {
-      h1 {
-        font-size: 24px;
-      }
-
-      .card {
-        padding: 16px;
-        border-radius: 14px;
-      }
-
-      .day-cell {
-        font-size: 14px;
-        border-radius: 10px;
-      }
-
-      .month-title {
-        font-size: 18px;
-      }
-
-      .button-row {
-        grid-template-columns: 1fr;
-      }
+      h1 { font-size: 24px; }
+      .card { padding: 16px; border-radius: 14px; }
+      .day-cell { font-size: 14px; border-radius: 10px; }
+      .month-title { font-size: 18px; }
+      .button-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
-  <div id="lineWarningBanner">
+  <div id="lineWarningBanner" style="background:#ffebee;color:#c62828;text-align:center;padding:12px;font-size:14px;font-weight:bold;border-bottom:1px solid #ffcdd2;">
     ⚠ LINE内ブラウザでは正常に動作しない場合があります。<br>
     ブラウザメニューから「外部ブラウザで開く」を選択してください。
   </div>
@@ -440,16 +370,20 @@
     <div class="card">
       <div class="complete-icon">✅</div>
       <div class="complete-title">送信完了</div>
-      <div class="complete-text" id="completeText">
-        希望休の送信が完了しました。
-      </div>
+      <div class="complete-text" id="completeText">希望休の送信が完了しました。</div>
       <div class="complete-detail" id="completeDetail"></div>
       <button class="submit-btn mt-16" id="backToFormBtn" type="button">入力画面へ戻る</button>
     </div>
   </div>
 
   <script>
-    const shiftcoreParams = <?!= shiftcoreParamsJson ?>;
+    // =========================
+    // 設定ここから
+    // =========================
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyTQlhU9osbUqh0cjJJCzERgs8fuQ1gr3x5svc-aw3TziPbhCE1UWQTCfgsjARKl7FiJw/exec";
+    // =========================
+    // 設定ここまで
+    // =========================
 
     let currentDate = new Date();
     currentDate.setDate(1);
@@ -493,24 +427,39 @@
       return ua.includes("Line/");
     }
 
+    function normalizeText(value) {
+      return String(value == null ? "" : value).trim();
+    }
+
     function showMessage(target, text, type = "") {
       target.textContent = text;
       target.className = "message";
-      if (type) {
-        target.classList.add(type);
-      }
+      if (type) target.classList.add(type);
     }
 
     function setInfoBox(target, text, type = "") {
       target.textContent = text;
       target.className = "info-box";
-      if (type) {
-        target.classList.add(type);
-      }
+      if (type) target.classList.add(type);
     }
 
-    function normalizeText(value) {
-      return String(value == null ? "" : value).trim();
+    function getQueryParams() {
+      const url = new URL(window.location.href);
+      return Object.fromEntries(url.searchParams.entries());
+    }
+
+    function buildCurrentUserFromQuery(params) {
+      return {
+        userId: normalizeText(params.userId || params.user_id || params.userid),
+        displayName: normalizeText(params.displayName || params.display_name || params.name),
+        employeeCode: normalizeText(params.employeeCode || params.employee_code || params.employeeId || params.employee_id).toUpperCase(),
+        role: normalizeText(params.role),
+        workStatus: normalizeText(params.workStatus || params.work_status).toLowerCase()
+      };
+    }
+
+    function isUserInactive() {
+      return currentUser.workStatus === "off";
     }
 
     function formatDateKey(dateObj) {
@@ -524,21 +473,6 @@
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, "0");
       return `${year}-${month}`;
-    }
-
-    function buildCurrentUserFromShiftCore(params) {
-      const p = params || {};
-      return {
-        userId: normalizeText(p.userId || p.user_id || p.userid),
-        displayName: normalizeText(p.displayName || p.display_name || p.name),
-        employeeCode: normalizeText(p.employeeCode || p.employee_code || p.employeeId || p.employee_id).toUpperCase(),
-        role: normalizeText(p.role),
-        workStatus: normalizeText(p.workStatus || p.work_status).toLowerCase()
-      };
-    }
-
-    function isUserInactive() {
-      return currentUser.workStatus === "off";
     }
 
     function updateSubmitButtonState() {
@@ -582,9 +516,7 @@
     }
 
     function setupShiftCoreEntryBanner(params) {
-      if ((params.from || "") !== "shiftcore") {
-        return;
-      }
+      if ((params.from || "") !== "shiftcore") return;
 
       const banner = document.createElement("div");
       banner.style.margin = "0 auto 16px";
@@ -606,12 +538,10 @@
 
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
-
       monthTitle.textContent = `${year}年${month + 1}月`;
 
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
-
       const startWeekday = firstDay.getDay();
       const totalDays = lastDay.getDate();
 
@@ -670,6 +600,18 @@
       noHolidayHint.textContent = "";
     }
 
+    function buildSubmitPayload() {
+      return {
+        userId: currentUser.userId,
+        displayName: currentUser.displayName,
+        employeeCode: currentUser.employeeCode,
+        targetYearMonth: getTargetYearMonth(),
+        offDates: noHolidayRequested ? [] : Array.from(selectedDates).sort(),
+        memo: noteInput.value.trim(),
+        submitType: noHolidayRequested ? "希望休なし" : "希望休あり"
+      };
+    }
+
     function buildConfirmMessage(payload) {
       const holidayText = payload.submitType === "希望休なし"
         ? "希望休なし"
@@ -691,7 +633,6 @@
         : (payload.offDates.length ? payload.offDates.join(", ") : "なし");
 
       completeText.textContent = payload.displayName + " さんの希望休提出が完了しました。";
-
       completeDetail.textContent =
         "【氏名】\n" + payload.displayName + "\n\n" +
         "【社員コード】\n" + payload.employeeCode + "\n\n" +
@@ -717,8 +658,7 @@
       }
 
       const offDates = Array.isArray(result.offDates) ? result.offDates : [];
-      offDates.forEach(dateStr => selectedDates.add(dateStr));
-
+      offDates.forEach((dateStr) => selectedDates.add(dateStr));
       noteInput.value = result.memo || "";
       noHolidayRequested = result.submitType === "希望休なし";
 
@@ -727,7 +667,47 @@
       updateSubmitButtonState();
     }
 
-    function loadLatestRequest() {
+    async function apiGet(action, params = {}) {
+      const url = new URL(GAS_API_URL);
+      url.searchParams.set("action", action);
+
+      Object.entries(params).forEach(([key, value]) => {
+        if (value != null && value !== "") {
+          url.searchParams.set(key, value);
+        }
+      });
+
+      const response = await fetch(url.toString(), {
+        method: "GET"
+      });
+
+      if (!response.ok) {
+        throw new Error("GET APIに失敗しました: " + response.status);
+      }
+
+      return await response.json();
+    }
+
+    async function apiPost(action, body = {}) {
+      const response = await fetch(GAS_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          action,
+          ...body
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("POST APIに失敗しました: " + response.status);
+      }
+
+      return await response.json();
+    }
+
+    async function loadLatestRequest() {
       if (!currentUser.userId) {
         showMessage(messageBox, "ShiftCoreユーザー情報を取得できませんでした", "error");
         return;
@@ -735,40 +715,26 @@
 
       showMessage(messageBox, "提出済み内容を確認中...", "");
 
-      google.script.run
-        .withSuccessHandler((result) => {
-          if (result.success) {
-            applyExistingRequest(result);
+      try {
+        const result = await apiGet("getLatestShiftRequest", {
+          userId: currentUser.userId,
+          targetYearMonth: getTargetYearMonth()
+        });
 
-            if (result.exists) {
-              showMessage(messageBox, "この月の提出済み内容を読み込みました", "success");
-            } else {
-              showMessage(messageBox, "この月の提出データはまだありません", "");
-            }
-          } else {
-            showMessage(messageBox, result.message || "提出済み内容の取得に失敗しました", "error");
-          }
-        })
-        .withFailureHandler((error) => {
-          console.error(error);
-          showMessage(messageBox, "提出済み内容の取得に失敗しました", "error");
-        })
-        .getLatestShiftRequest(currentUser.userId, getTargetYearMonth());
-    }
-
-    function buildSubmitPayload() {
-      const offDates = Array.from(selectedDates).sort();
-      const submitType = noHolidayRequested ? "希望休なし" : "希望休あり";
-
-      return {
-        userId: currentUser.userId,
-        displayName: currentUser.displayName,
-        employeeCode: currentUser.employeeCode,
-        targetYearMonth: getTargetYearMonth(),
-        offDates: noHolidayRequested ? [] : offDates,
-        memo: noteInput.value.trim(),
-        submitType: submitType
-      };
+        if (result.success) {
+          applyExistingRequest(result);
+          showMessage(
+            messageBox,
+            result.exists ? "この月の提出済み内容を読み込みました" : "この月の提出データはまだありません",
+            result.exists ? "success" : ""
+          );
+        } else {
+          showMessage(messageBox, result.message || "提出済み内容の取得に失敗しました", "error");
+        }
+      } catch (error) {
+        console.error(error);
+        showMessage(messageBox, "提出済み内容の取得に失敗しました", "error");
+      }
     }
 
     noHolidayBtn.addEventListener("click", () => {
@@ -801,7 +767,7 @@
       updateSubmitButtonState();
     });
 
-    submitBtn.addEventListener("click", () => {
+    submitBtn.addEventListener("click", async () => {
       showMessage(messageBox, "", "");
 
       if (isUserInactive()) {
@@ -821,54 +787,51 @@
 
       const payload = buildSubmitPayload();
       const ok = window.confirm(buildConfirmMessage(payload));
-
-      if (!ok) {
-        return;
-      }
+      if (!ok) return;
 
       submitBtn.disabled = true;
       submitBtn.textContent = "送信中...";
 
-      google.script.run
-        .withSuccessHandler((result) => {
-          if (result.success) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "希望休を送信";
-            showCompleteScreen(payload);
-          } else {
-            showMessage(messageBox, result.message || "保存に失敗しました", "error");
-            submitBtn.disabled = false;
-            submitBtn.textContent = "希望休を送信";
-            updateSubmitButtonState();
-          }
-        })
-        .withFailureHandler((error) => {
-          console.error(error);
-          showMessage(messageBox, "送信中にエラーが発生しました", "error");
+      try {
+        const result = await apiPost("submitShiftRequest", {
+          payload
+        });
+
+        if (result.success) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "希望休を送信";
+          showCompleteScreen(payload);
+        } else {
+          showMessage(messageBox, result.message || "保存に失敗しました", "error");
           submitBtn.disabled = false;
           submitBtn.textContent = "希望休を送信";
           updateSubmitButtonState();
-        })
-        .submitShiftRequest(payload);
+        }
+      } catch (error) {
+        console.error(error);
+        showMessage(messageBox, "送信中にエラーが発生しました", "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "希望休を送信";
+        updateSubmitButtonState();
+      }
     });
 
-    window.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("DOMContentLoaded", async () => {
       if (isLineInAppBrowser()) {
         document.getElementById("lineWarningBanner").style.display = "block";
       }
 
-      currentUser = buildCurrentUserFromShiftCore(shiftcoreParams);
+      const params = getQueryParams();
+      currentUser = buildCurrentUserFromQuery(params);
 
-      setupShiftCoreEntryBanner(shiftcoreParams);
+      setupShiftCoreEntryBanner(params);
       renderAccountInfo();
       renderCalendar();
       renderSelectedDates();
-
-      mainFormArea.style.display = "block";
       updateSubmitButtonState();
 
       if (currentUser.userId && currentUser.displayName && currentUser.employeeCode) {
-        loadLatestRequest();
+        await loadLatestRequest();
       } else {
         showMessage(messageBox, "ShiftCoreから必要なユーザー情報を受け取れていません", "error");
       }

@@ -56,7 +56,7 @@ export function applyExistingRequest(result) {
   }
 
   const offDates = Array.isArray(result.offDates) ? result.offDates : [];
-  offDates.forEach((dateStr) => selectedDates.add(dateStr));
+offDates.forEach((dateStr) => addSelectedDate(dateStr));
   noteInput.value = result.memo || "";
   setNoHolidayRequested(result.submitType === "希望休なし");
 

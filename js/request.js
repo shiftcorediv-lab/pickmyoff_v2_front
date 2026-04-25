@@ -4,7 +4,8 @@ import {
   selectedDates,
   noHolidayRequested,
   clearSelectedDates,
-  setNoHolidayRequested
+  setNoHolidayRequested,
+  addSelectedDate
 } from "./state.js";
 import { apiGet, apiPost } from "./api.js";
 import {
